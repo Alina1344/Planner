@@ -13,3 +13,4 @@ C:\Users\Алина\RiderProjects\Planner\Storage\obj\Debug\net8.0\Storage.dll
 C:\Users\Алина\RiderProjects\Planner\Storage\obj\Debug\net8.0\refint\Storage.dll
 C:\Users\Алина\RiderProjects\Planner\Storage\obj\Debug\net8.0\Storage.pdb
 C:\Users\Алина\RiderProjects\Planner\Storage\obj\Debug\net8.0\ref\Storage.dll
+C:\Users\Алина\RiderProjects\Planner\Storage\obj\Debug\net8.0\Storage.sourcelink.json

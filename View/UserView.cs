@@ -8,9 +8,7 @@ using Presenter;
 
 namespace View
 {
-    //fffffffffffffff
-    public class UserView(UserPresenter userPresenter, TodoListView todolistView, TodoView todoView)
-        : IUserView
+    public class UserView(UserPresenter userPresenter, TodoListView todolistView, TodoView todoView) : IUserView
     {
         private bool _isProgramRunning = true;
         private bool _isLoggedIn;
@@ -80,7 +78,7 @@ namespace View
             {
                 CancellationToken token = new CancellationToken();
                 User user = await userPresenter.GetAuthenticatedUserAsync(token);
-                await todoView.ShowSearchedTodo(token, user);
+                await todoView.ShowCompletTodo(token, user);
             }
             catch (Exception e)
             {
@@ -94,7 +92,7 @@ namespace View
             {
                 CancellationToken token = new CancellationToken();
                 User user = await userPresenter.GetAuthenticatedUserAsync(token);
-                await todoView.ShowSearchedTodo(token, user); // Здесь вы вызываете метод для отображения выполненных задач
+                await todoView.ShowSearchedTodoAsync(token, user); // Здесь вы вызываете метод для отображения выполненных задач
             }
             catch (Exception e)
             {
@@ -110,7 +108,6 @@ namespace View
             _isLoggedIn = false;
             _isProgramRunning = false; // Остановка программы
         }
-
         
 
 

@@ -262,8 +262,43 @@ namespace View
                 Console.WriteLine($"Ошибка при пометке задачи как выполненной: {e.Message}");
             }
         }
+        
+        public async Task ShowSearchedTodoAsync(CancellationToken token, User user)
+        {
+            try
+            {
+                Console.Write("Введите тег для поиска задач: ");
+                string tag = Console.ReadLine();
 
-        public async Task ShowSearchedTodo(CancellationToken token, User user)
+                if (string.IsNullOrWhiteSpace(tag))
+                {
+                    Console.WriteLine("Тег не может быть пустым.");
+                    return;
+                }
+
+                // Используем метод поиска задач по тегу из TodoPresenter
+                IReadOnlyCollection<Todo> searchedTodos = await _todoPresenter.SearchTodosByTagAsync(tag, token);
+
+                if (searchedTodos == null || searchedTodos.Count == 0)
+                {
+                    Console.WriteLine("Задачи с данным тегом не найдены.");
+                    return;
+                }
+
+                Console.WriteLine("Найденные задачи:");
+                foreach (var todo in searchedTodos)
+                {
+                    Console.WriteLine($"Имя: {todo.Title}, Описание: {todo.Description}, Дедлайн: {todo.Deadline}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка при поиске задач: {ex.Message}");
+            }
+        }
+
+
+        public async Task ShowCompletTodo(CancellationToken token, User user)
         {
             try
             {

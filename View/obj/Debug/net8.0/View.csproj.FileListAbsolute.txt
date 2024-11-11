@@ -17,3 +17,4 @@ C:\Users\Алина\RiderProjects\Planner\View\obj\Debug\net8.0\View.dll
 C:\Users\Алина\RiderProjects\Planner\View\obj\Debug\net8.0\refint\View.dll
 C:\Users\Алина\RiderProjects\Planner\View\obj\Debug\net8.0\View.pdb
 C:\Users\Алина\RiderProjects\Planner\View\obj\Debug\net8.0\ref\View.dll
+C:\Users\Алина\RiderProjects\Planner\View\obj\Debug\net8.0\View.sourcelink.json

@@ -54,19 +54,7 @@ namespace Storage
             token.ThrowIfCancellationRequested();
             await _repository.DeleteAsync(t => t.Id == todoId, token);
         }
-
-        // Поиск задач по ключевому слову
-        public async Task<IReadOnlyCollection<Todo>> SearchTodosByKeywordAsync(string keyword, CancellationToken token)
-        {
-            token.ThrowIfCancellationRequested();
-            List<Todo> todos = await _repository.GetAllAsync(token);
-
-            return todos.Where(t =>
-                    !t.IsCompleted &&
-                    (t.Title.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
-                     t.Description.Contains(keyword, StringComparison.OrdinalIgnoreCase)))
-                .ToList();
-        }
+        
 
         // Отметка задачи как выполненной
         public async Task CompleteTodoAsync(Guid todoId, CancellationToken token)
@@ -97,6 +85,19 @@ namespace Storage
             token.ThrowIfCancellationRequested();
             List<Todo> todos = await _repository.GetAllAsync(token);
             return todos.Where(t => t.Tags.Contains(tag)).ToList();
+        }
+        
+        // Поиск задач по ключевому слову
+        public async Task<IReadOnlyCollection<Todo>> SearchTodosByKeywordAsync(string keyword, CancellationToken token)
+        {
+            token.ThrowIfCancellationRequested();
+            List<Todo> todos = await _repository.GetAllAsync(token);
+
+            return todos.Where(t =>
+                    !t.IsCompleted &&
+                    (t.Title.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
+                     t.Description.Contains(keyword, StringComparison.OrdinalIgnoreCase)))
+                .ToList();
         }
 
         // Фильтрация задач по срокам

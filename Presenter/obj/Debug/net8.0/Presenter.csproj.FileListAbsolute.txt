@@ -15,3 +15,4 @@ C:\Users\Алина\RiderProjects\Planner\Presenter\obj\Debug\net8.0\Presenter.d
 C:\Users\Алина\RiderProjects\Planner\Presenter\obj\Debug\net8.0\refint\Presenter.dll
 C:\Users\Алина\RiderProjects\Planner\Presenter\obj\Debug\net8.0\Presenter.pdb
 C:\Users\Алина\RiderProjects\Planner\Presenter\obj\Debug\net8.0\ref\Presenter.dll
+C:\Users\Алина\RiderProjects\Planner\Presenter\obj\Debug\net8.0\Presenter.sourcelink.json

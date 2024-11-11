@@ -22,15 +22,6 @@ namespace Presenter
             return _todoStorage.LoadTodosByWishlistIdAsync(wishlistId, token);
         }
 
-       public async Task<IReadOnlyCollection<Todo>> SearchTodosByKeywordAsync(string keyword, CancellationToken token)
-               {
-                   if (string.IsNullOrWhiteSpace(keyword))
-                   {
-                       return Array.Empty<Todo>();
-                   }
-                   return await _todoStorage.SearchTodosByKeywordAsync(keyword, token);
-               }
-
 
         public async Task<IReadOnlyCollection<Todo>> LoadReservedTodosAsync(string userId, CancellationToken token)
         {
@@ -96,15 +87,12 @@ namespace Presenter
             return await _todoStorage.GetCompletedTodosAsync(token);
         }
 
+        // Поиск задач по тегу
         public async Task<IReadOnlyCollection<Todo>> SearchTodosByTagAsync(string tag, CancellationToken token)
         {
-            if (string.IsNullOrWhiteSpace(tag))
-            {
-                throw new ArgumentNullException(nameof(tag));
-            }
-            token.ThrowIfCancellationRequested();
             return await _todoStorage.SearchTodosByTagAsync(tag, token);
         }
+
 
         public async Task<IReadOnlyCollection<Todo>> FilterTodosByDeadlineAsync(DateTime deadline, CancellationToken token)
         {
