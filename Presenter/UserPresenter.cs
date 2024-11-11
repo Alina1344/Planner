@@ -34,6 +34,7 @@ namespace Presenter
 
             await _authService.RegisterUserAsync(name, email, password, token);
         }
+        
 
         public async Task<User> AuthenticateUserAsync(string email, string password, CancellationToken token)
         {

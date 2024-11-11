@@ -13,7 +13,10 @@ public interface ITodoStorage
     Task CompleteTodoAsync(Guid todoId, CancellationToken token);
     Task<IReadOnlyCollection<Todo>> GetCompletedTodosAsync(CancellationToken token);
     Task<IReadOnlyCollection<Todo>> LoadTodosByWishlistIdAsync(string todoListIdString, CancellationToken token);
-    
+    Task<IReadOnlyCollection<Todo>> GetAllTodosAsync(CancellationToken token);
+    Task ReserveTodoAsync(Guid todoId, string reserverId, CancellationToken token);
+    Task<IReadOnlyCollection<Todo>> LoadReservedTodosByUserIdAsync(string userId, CancellationToken token);
+    Task<IReadOnlyCollection<Todo>> SearchTodosByTagAsync(string tag, CancellationToken token);
     
 
 }

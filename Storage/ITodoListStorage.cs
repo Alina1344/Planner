@@ -13,5 +13,8 @@ namespace Storage
         Task DeleteTodoListAsync(Guid todoListId, CancellationToken token);
         Task UpdateTodoListAsync(TodoList todoList, CancellationToken token);
         Task<IReadOnlyCollection<Todo>> GetAllTodosAsync(CancellationToken token);
+        Task<IReadOnlyCollection<Todo>> GetTodosByTagAsync(string tag, CancellationToken token);
+        Task<IReadOnlyCollection<Todo>> GetTodosByDeadlineAsync(DateTime deadline, CancellationToken token);
+
     }
 }

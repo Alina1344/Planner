@@ -10,8 +10,8 @@ namespace View;
 public interface IUserView
 {
     Task ShowUser(User user);  
-    Task Start();
-    
+    Task Start(); 
+    Task AuthUser(); 
 }
 
 

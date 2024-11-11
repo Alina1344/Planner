@@ -9,9 +9,12 @@ using Storage;
 using View;
 
 namespace View;
+
 public interface ITodoListView
 {
     Task ShowUserTodoListAsync(User user);
-    Task AddTodoListAsync(string owner_id);
+    Task AddTodoListAsync(string ownerId);
     Task UpdateTodoList(User user, bool update);
+    Task DeleteTodoList(User user);
+    Task StartTodolist(User user);
 }

@@ -81,9 +81,13 @@ namespace View
                     return;
                 }
 
-                foreach (var present in todos)
+                foreach (var todo in todos)
                 {
-                    Console.WriteLine($"Имя: {present.Title}, Описание: {present.Description}");
+                    string tags = todo.Tags != null && todo.Tags.Count > 0 
+                        ? string.Join(", ", todo.Tags) 
+                        : "нет тегов";
+            
+                    Console.WriteLine($"Имя: {todo.Title}, Описание: {todo.Description}, Дедлайн: {todo.Deadline}, Теги: {tags}");
                 }
             }
             catch (Exception ex)
@@ -91,9 +95,8 @@ namespace View
                 Console.WriteLine($"Ошибка при загрузке задачи: {ex.Message}");
             }
         }
-
-       
-
+        
+        
         public async Task AddTodo(string userId, string wishlistId)
         {
             var cancellationTokenSource = new CancellationTokenSource();
@@ -167,8 +170,7 @@ namespace View
                 Console.WriteLine($"Произошла ошибка: {e.Message}");
             }
         }
-
-
+        
 
         public async Task DeleteTodo(string wishlistId)
         {
@@ -216,6 +218,26 @@ namespace View
             }
         }
        
+        
+        public async Task ShowSortedTodosByDeadlineAsync(CancellationToken token, User user)
+        {
+            try
+            {
+                // Получаем все задачи, отсортированные по дедлайну
+                var sortedTasks = await _todoPresenter.GetAllTodosSortedByDeadlineAsync(token);
+
+                // Отображаем отсортированные задачи
+                Console.WriteLine("Задачи, отсортированные по дедлайну:");
+                foreach (var task in sortedTasks)
+                {
+                    Console.WriteLine($"Задача: {task.Title}, Дедлайн: {task.Deadline}");
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Ошибка при отображении отсортированных задач: {e.Message}");
+            }
+        }
 
         public async Task MarkTodoAsCompleted(string wishlistId)
         {
@@ -296,7 +318,7 @@ namespace View
                 Console.WriteLine($"Ошибка при поиске задач: {ex.Message}");
             }
         }
-
+        
 
         public async Task ShowCompletTodo(CancellationToken token, User user)
         {

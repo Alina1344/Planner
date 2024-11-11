@@ -46,9 +46,10 @@ namespace View
                 var menuActions = new Dictionary<int, Func<Task>>()
                 {
                     { 1, async () => await todolistView.StartTodolist(user) },
-                    { 2, async () => await ShowCompletedTodos() }, 
+                    { 2, async () => await SortTasksByDeadline() }, 
                     { 3, async () => await SearchTodos() },
-                    { 4, async () => await ExitProgram() }
+                    { 4, async () => await SortTasksByDeadline() }, // Новая опция для сортировки задач по дедлайну
+                    { 5, async () => await ExitProgram() } // Обновлено для новой опции
                 };
 
                 var menuLabels = new Dictionary<int, string>()
@@ -56,7 +57,8 @@ namespace View
                     { 1, "Посмотреть списки задач" },
                     { 2, "Посмотреть выполненные задачи" }, 
                     { 3, "Найти задачу" },
-                    { 4, "Выход" }
+                    { 4, "Сортировать задачи по дедлайну" }, // Новый пункт для сортировки задач
+                    { 5, "Выход" }
                 };
 
                 var menuView = new MenuView(menuActions, menuLabels);
@@ -72,17 +74,21 @@ namespace View
                 Console.WriteLine($"Произошла ошибка: {e.Message}");
             }
         }
-        private async Task ShowCompletedTodos()
+        
+
+        private async Task SortTasksByDeadline()
         {
             try
             {
-                CancellationToken token = new CancellationToken();
-                User user = await userPresenter.GetAuthenticatedUserAsync(token);
-                await todoView.ShowCompletTodo(token, user);
+                var token = new CancellationToken();
+                User user = await userPresenter.GetAuthenticatedUserAsync(token); // Получаем аутентифицированного пользователя
+
+                // Вызываем метод в TodoView для отображения отсортированных задач
+                await todoView.ShowSortedTodosByDeadlineAsync(token, user);
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Ошибка при отображении выполненных задач: {e.Message}");
+                Console.WriteLine($"Ошибка при сортировке задач: {e.Message}");
             }
         }
         
@@ -99,6 +105,9 @@ namespace View
                 Console.WriteLine($"Ошибка при поиске задач: {e.Message}");
             }
         }
+        
+       
+
 
 
         private async Task ExitProgram()

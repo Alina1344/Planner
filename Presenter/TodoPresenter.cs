@@ -93,11 +93,15 @@ namespace Presenter
             return await _todoStorage.SearchTodosByTagAsync(tag, token);
         }
 
-
-        public async Task<IReadOnlyCollection<Todo>> FilterTodosByDeadlineAsync(DateTime deadline, CancellationToken token)
+        
+        
+        public async Task<IReadOnlyCollection<Todo>> GetAllTodosSortedByDeadlineAsync(CancellationToken token)
         {
-            token.ThrowIfCancellationRequested();
-            return await _todoStorage.FilterTodosByDeadlineAsync(deadline, token);
+            // Получаем все задачи, отсортированные по дедлайну
+            var todos = await _todoStorage.GetAllTodosAsync(token);
+            return todos.OrderBy(t => t.Deadline).ToList();
         }
+
+        
     }
 }

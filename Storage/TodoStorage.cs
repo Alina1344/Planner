@@ -100,13 +100,16 @@ namespace Storage
                 .ToList();
         }
 
-        // Фильтрация задач по срокам
-        public async Task<IReadOnlyCollection<Todo>> FilterTodosByDeadlineAsync(DateTime deadline, CancellationToken token)
+        
+        // Получение всех задач, отсортированных по дедлайну
+        public async Task<IReadOnlyCollection<Todo>> GetAllTodosAsync(CancellationToken token)
         {
             token.ThrowIfCancellationRequested();
             List<Todo> todos = await _repository.GetAllAsync(token);
-            return todos.Where(t => t.Deadline <= deadline).ToList();
+            return todos.OrderBy(t => t.Deadline).ToList();
         }
+
+
 
         // Резервирование задачи
         public async Task ReserveTodoAsync(Guid todoId, string reserverId, CancellationToken token)
