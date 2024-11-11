@@ -1,0 +1,181 @@
+{
+  "version": 3,
+  "targets": {
+    "net8.0": {}
+  },
+  "libraries": {},
+  "projectFileDependencyGroups": {
+    "net8.0": [
+      "Microsoft.NET.Test.Sdk >= 17.8.0",
+      "NUnit >= 3.14.0",
+      "NUnit.Analyzers >= 3.9.0",
+      "NUnit3TestAdapter >= 4.5.0",
+      "coverlet.collector >= 6.0.0"
+    ]
+  },
+  "packageFolders": {
+    "C:\\Users\\Алина\\.nuget\\packages\\": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "C:\\Users\\Алина\\RiderProjects\\Planner\\UnitTests\\UnitTests.csproj",
+      "projectName": "UnitTests",
+      "projectPath": "C:\\Users\\Алина\\RiderProjects\\Planner\\UnitTests\\UnitTests.csproj",
+      "packagesPath": "C:\\Users\\Алина\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Алина\\RiderProjects\\Planner\\UnitTests\\obj\\",
+      "projectStyle": "PackageReference",
+      "configFilePaths": [
+        "C:\\Users\\Алина\\AppData\\Roaming\\NuGet\\NuGet.Config"
+      ],
+      "originalTargetFrameworks": [
+        "net8.0"
+      ],
+      "sources": {
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "projectReferences": {}
+        }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
+      }
+    },
+    "frameworks": {
+      "net8.0": {
+        "targetAlias": "net8.0",
+        "dependencies": {
+          "Microsoft.NET.Test.Sdk": {
+            "target": "Package",
+            "version": "[17.8.0, )"
+          },
+          "NUnit": {
+            "target": "Package",
+            "version": "[3.14.0, )"
+          },
+          "NUnit.Analyzers": {
+            "target": "Package",
+            "version": "[3.9.0, )"
+          },
+          "NUnit3TestAdapter": {
+            "target": "Package",
+            "version": "[4.5.0, )"
+          },
+          "coverlet.collector": {
+            "target": "Package",
+            "version": "[6.0.0, )"
+          }
+        },
+        "imports": [
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48",
+          "net481"
+        ],
+        "assetTargetFallback": true,
+        "warn": true,
+        "frameworkReferences": {
+          "Microsoft.NETCore.App": {
+            "privateAssets": "all"
+          }
+        },
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.402/PortableRuntimeIdentifierGraph.json"
+      }
+    }
+  },
+  "logs": [
+    {
+      "code": "NU1801",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Unable to load the service index for source https://api.nuget.org/v3/index.json.",
+      "libraryId": "coverlet.collector"
+    },
+    {
+      "code": "NU1801",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Unable to load the service index for source https://api.nuget.org/v3/index.json.",
+      "libraryId": "Microsoft.NET.Test.Sdk"
+    },
+    {
+      "code": "NU1801",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Unable to load the service index for source https://api.nuget.org/v3/index.json.",
+      "libraryId": "NUnit"
+    },
+    {
+      "code": "NU1801",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Unable to load the service index for source https://api.nuget.org/v3/index.json.",
+      "libraryId": "NUnit.Analyzers"
+    },
+    {
+      "code": "NU1801",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Unable to load the service index for source https://api.nuget.org/v3/index.json.",
+      "libraryId": "NUnit3TestAdapter"
+    },
+    {
+      "code": "NU1101",
+      "level": "Error",
+      "message": "Unable to find package coverlet.collector. No packages exist with this id in source(s): nuget.org",
+      "libraryId": "coverlet.collector",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    },
+    {
+      "code": "NU1101",
+      "level": "Error",
+      "message": "Unable to find package Microsoft.NET.Test.Sdk. No packages exist with this id in source(s): nuget.org",
+      "libraryId": "Microsoft.NET.Test.Sdk",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    },
+    {
+      "code": "NU1101",
+      "level": "Error",
+      "message": "Unable to find package NUnit. No packages exist with this id in source(s): nuget.org",
+      "libraryId": "NUnit",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    },
+    {
+      "code": "NU1101",
+      "level": "Error",
+      "message": "Unable to find package NUnit.Analyzers. No packages exist with this id in source(s): nuget.org",
+      "libraryId": "NUnit.Analyzers",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    },
+    {
+      "code": "NU1101",
+      "level": "Error",
+      "message": "Unable to find package NUnit3TestAdapter. No packages exist with this id in source(s): nuget.org",
+      "libraryId": "NUnit3TestAdapter",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    }
+  ]
+}
