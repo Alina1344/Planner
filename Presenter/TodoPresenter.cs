@@ -9,11 +9,12 @@ namespace Presenter
 {
     public class TodoPresenter : ITodoPresenter
     {
-        private readonly TodoStorage _todoStorage;
-        
-        public TodoPresenter()
+        private readonly ITodoStorage _todoStorage;
+
+        // Новый конструктор с зависимостью на ITodoStorage
+        public TodoPresenter(ITodoStorage todoStorage)
         {
-            _todoStorage = new TodoStorage();
+            _todoStorage = todoStorage ?? throw new ArgumentNullException(nameof(todoStorage));
         }
         
 

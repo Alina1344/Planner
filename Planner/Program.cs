@@ -11,7 +11,7 @@ namespace Planner;
 class Program    {
     public static async Task Main(string[] args)       
     {
-        UserView userView = new UserView(new UserPresenter(),new TodoListView(new TodoListPresenter(),new TodoView()),new TodoView());           
+        UserView userView = new UserView(new UserPresenter(),new TodoListView(new TodoListPresenter(),new TodoView(new TodoStorage())),new TodoView(new TodoStorage()));           
         await userView.Start();
     }
 }

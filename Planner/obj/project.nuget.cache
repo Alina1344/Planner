@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "5Ius5GCLZCU=",
+  "dgSpecHash": "LVNZ9OFQED8=",
   "success": true,
   "projectFilePath": "C:\\Users\\Алина\\RiderProjects\\Planner\\Planner\\Planner.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\Алина\\.nuget\\packages\\nunit\\4.2.2\\nunit.4.2.2.nupkg.sha512"
+  ],
   "logs": []
 }

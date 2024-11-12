@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Storage;
 
 namespace View
 {
@@ -12,9 +13,10 @@ namespace View
         private TodoPresenter _todoPresenter;
         private TodoListPresenter _todolistPresenter;
 
-        public TodoView()
+        // Новый конструктор для TodoView, который принимает ITodoStorage
+        public TodoView(ITodoStorage todoStorage)
         {
-            _todoPresenter = new TodoPresenter();
+            _todoPresenter = new TodoPresenter(todoStorage);
         }
 
         public async Task StartTodos(User user, TodoList todolist, bool update)
