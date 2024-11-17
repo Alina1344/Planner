@@ -96,8 +96,8 @@ namespace View
         {
             try
             {
-                CancellationToken token = new CancellationToken();
-                User user = await userPresenter.GetAuthenticatedUserAsync(token);
+                var token = new CancellationToken();
+                var user = await userPresenter.GetAuthenticatedUserAsync(token);
                 await todoView.ShowSearchedTodoAsync(token, user); // Здесь вы вызываете метод для отображения выполненных задач
             }
             catch (Exception e)
