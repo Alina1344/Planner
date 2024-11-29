@@ -8,7 +8,7 @@ using Storage;
 
 namespace View
 {
-    public class TodoView : ITodoView
+    public class TodoView 
     {
         private TodoPresenter _todoPresenter;
         private TodoListPresenter _todolistPresenter;
@@ -85,11 +85,8 @@ namespace View
 
                 foreach (var todo in todos)
                 {
-                    string tags = todo.Tags != null && todo.Tags.Count > 0 
-                        ? string.Join(", ", todo.Tags) 
-                        : "нет тегов";
-            
-                    Console.WriteLine($"Имя: {todo.Title}, Описание: {todo.Description}, Дедлайн: {todo.Deadline}, Теги: {tags}");
+
+                    Console.WriteLine($"Имя: {todo.Title}, Описание: {todo.Description}, Дедлайн: {todo.Deadline}");
                 }
             }
             catch (Exception ex)
@@ -151,20 +148,10 @@ namespace View
                 }
 
                 // Ввод тегов
-                List<string> tags = new List<string>();
-                Console.WriteLine("Введите теги для задачи (нажмите Enter для завершения ввода):");
-                while (true)
-                {
-                    string tag = Console.ReadLine();
-                    if (string.IsNullOrWhiteSpace(tag))
-                    {
-                        break; // Завершить ввод тегов
-                    }
-                    tags.Add(tag);
-                }
+              
 
                 // Добавление новой задачи
-                await _todoPresenter.AddNewTodoAsync(p_name, p_description, userId, wishlistId, p_deadline, tags, token);
+                await _todoPresenter.AddNewTodoAsync(p_name, p_description, userId, wishlistId, p_deadline, token);
                 Console.WriteLine("Задача успешно создана.");
             }
             catch (Exception e)

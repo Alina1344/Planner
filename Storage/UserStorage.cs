@@ -6,74 +6,82 @@ using Models;
 
 namespace Storage
 {
+    
     public class UserStorage : IUserStorage
     {
-        private readonly IFileStorage<User> _userRepository;
-        private readonly IFileStorage<Todo> _taskRepository; // Зависимость для задач
+        private readonly IDatabaseRepository<User> _databaseRepository;
+        
+            // Основной конструктор для приложения
+            public UserStorage()
+            {
+                _databaseRepository = new DatabaseRepository<User>(
+                    "Host=localhost;Port=1111;Username=postgres;Password=alina13122003;Database=postgres",
+                    "users"
+                );
+            }
+        
+            // Конструктор для работы с кастомной строкой подключения (например, для тестов)
+            public UserStorage(string connectionString)
+            {
+                _databaseRepository = new DatabaseRepository<User>(connectionString, "users");
+            }
+        
+            // Новый конструктор для тестов (принимает реализацию IDatabaseRepository<User>)
+            public UserStorage(IDatabaseRepository<User> databaseRepository)
+            {
+                _databaseRepository = databaseRepository;
+            }
+        
 
-        public UserStorage()
+        public async Task<IReadOnlyCollection<User>> GetAllUsersAsync(CancellationToken cancellationToken)
         {
-            _userRepository = new FileStorage<User>("../../data/Users.json", "users");
-            _taskRepository = new FileStorage<Todo>("../../data/Todos.json", "todos"); // Путь для задач
+            return await _databaseRepository.GetListAsync("1=1", null, cancellationToken);
         }
 
-        // Дополнительный конструктор для тестов (или для гибкой зависимости)
-        public UserStorage(IFileStorage<User> userRepository, IFileStorage<Todo> taskRepository)
+        public async Task AddUserAsync(User user, CancellationToken cancellationToken)
         {
-            _userRepository = userRepository;
-            _taskRepository = taskRepository;
+            await _databaseRepository.AddAsync(user, cancellationToken);
         }
 
-        public async Task<User> GetUserAsync(string userId, CancellationToken token)
+        public async Task DeleteUserAsync(string userId, CancellationToken cancellationToken)
         {
-            token.ThrowIfCancellationRequested();
-            var users = await _userRepository.GetAllAsync(token);
-            return users.FirstOrDefault(u => u.Id == userId);
+            await _databaseRepository.DeleteAsync("id = @Id", new { Id = userId }, cancellationToken);
         }
 
-        public async Task<IReadOnlyCollection<User>> SearchUsersByKeywordAsync(string keyword, CancellationToken token)
+        public async Task UpdateUserAsync(string userId, User updatedUser, CancellationToken cancellationToken)
         {
-            token.ThrowIfCancellationRequested();
-            var users = await _userRepository.GetAllAsync(token);
-            var filteredUsers = users.Where(u => 
+            await _databaseRepository.UpdateAsync("id = @Id", new { Id = userId }, updatedUser, cancellationToken);
+        }
+
+        /// <summary>
+        /// Получить пользователя по ID.
+        /// </summary>
+        public async Task<User?> GetUserAsync(string userId, CancellationToken cancellationToken)
+        {
+            return await _databaseRepository.GetSingleAsync("id = @Id", new { Id = userId }, cancellationToken);
+        }
+
+        /// <summary>
+        /// Поиск пользователей по ключевому слову.
+        /// </summary>
+        public async Task<IReadOnlyCollection<User>> SearchUsersByKeywordAsync(string keyword, CancellationToken cancellationToken)
+        {
+            var users = await _databaseRepository.GetListAsync("1=1", null, cancellationToken);
+
+            var filteredUsers = users.Where(u =>
                 u.Name.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
-                u.Email.Contains(keyword, StringComparison.OrdinalIgnoreCase))
-                .ToList();
+                u.Email.Contains(keyword, StringComparison.OrdinalIgnoreCase)).ToList();
 
             return filteredUsers;
         }
 
-        public async Task<User> GetUserByEmailAsync(string email, CancellationToken token)
+        /// <summary>
+        /// Получить пользователя по Email.
+        /// </summary>
+        public async Task<User?> GetUserByEmailAsync(string email, CancellationToken cancellationToken)
         {
-            token.ThrowIfCancellationRequested();
-            var users = await _userRepository.GetAllAsync(token);
-            return users.FirstOrDefault(u => u.Email == email);
-        }
-
-        public async Task AddUserAsync(User user, CancellationToken token)
-        {
-            token.ThrowIfCancellationRequested();
-            await _userRepository.AddAsync(user, token);
-        }
-
-        public async Task DeleteUserAsync(string userId, CancellationToken token)
-        {
-            token.ThrowIfCancellationRequested();
-            await _userRepository.DeleteAsync(u => u.Id == userId, token);
-        }
-
-        public async Task UpdateUserAsync(User updatedUser, CancellationToken token)
-        {
-            token.ThrowIfCancellationRequested();
-            await _userRepository.UpdateAsync(u => u.Id == updatedUser.Id, updatedUser, token);
-        }
-
-        // Метод для получения всех задач пользователя
-        public async Task<IReadOnlyCollection<Todo>> GetTasksForUserAsync(string userId, CancellationToken token)
-        {
-            token.ThrowIfCancellationRequested();
-            var allTasks = await _taskRepository.GetAllAsync(token);
-            return allTasks.Where(task => task.OwnerId == userId).ToList().AsReadOnly();
+            return await _databaseRepository.GetSingleAsync("email = @Email", new { Email = email }, cancellationToken);
         }
     }
 }
+

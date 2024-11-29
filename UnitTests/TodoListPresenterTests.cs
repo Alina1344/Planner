@@ -35,7 +35,7 @@ namespace Presenter.Tests
             var user = new User(userId, "Test User", "test@example.com", "UserRole");
             var todoLists = new List<TodoList>
             {
-                new TodoList(Guid.NewGuid(), "TodoList1", userId, new List<Todo>())
+                new TodoList(Guid.NewGuid(), "TodoList1", userId)
             };
 
             _userPresenterMock
@@ -108,8 +108,8 @@ namespace Presenter.Tests
             DateTime deadline = DateTime.Today;
             var todos = new List<Todo>
             {
-                new Todo(Guid.NewGuid(), "Todo1", "Description1", DateTime.Today.AddDays(-1), new List<string>(), false, Guid.NewGuid(), "owner-id"),
-                new Todo(Guid.NewGuid(), "Todo2", "Description2", DateTime.Today.AddDays(1), new List<string>(), false, Guid.NewGuid(), "owner-id")
+                new Todo(Guid.NewGuid(), "Todo1", "Description1", DateTime.Today.AddDays(-1),  false, Guid.NewGuid(), "owner-id"),
+                new Todo(Guid.NewGuid(), "Todo2", "Description2", DateTime.Today.AddDays(1),  false, Guid.NewGuid(), "owner-id")
             };
 
             _wishlistRepositoryMock

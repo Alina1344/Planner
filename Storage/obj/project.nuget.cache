@@ -1,8 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "ZfIH2q7i5Ys=",
+  "dgSpecHash": "y+SpJFImeWo=",
   "success": true,
   "projectFilePath": "C:\\Users\\Алина\\RiderProjects\\Planner\\Storage\\Storage.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\Алина\\.nuget\\packages\\dapper\\2.1.35\\dapper.2.1.35.nupkg.sha512",
+    "C:\\Users\\Алина\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\8.0.0\\microsoft.extensions.dependencyinjection.abstractions.8.0.0.nupkg.sha512",
+    "C:\\Users\\Алина\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\8.0.0\\microsoft.extensions.logging.abstractions.8.0.0.nupkg.sha512",
+    "C:\\Users\\Алина\\.nuget\\packages\\npgsql\\8.0.5\\npgsql.8.0.5.nupkg.sha512"
+  ],
   "logs": []
 }

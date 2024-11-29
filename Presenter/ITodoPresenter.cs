@@ -13,7 +13,7 @@ public interface ITodoPresenter
     Task<IReadOnlyCollection<Todo>> SearchTodosByTagAsync(string tag, CancellationToken token);
     Task<IReadOnlyCollection<Todo>> GetAllTodosSortedByDeadlineAsync(CancellationToken token);
 
-    Task AddNewTodoAsync(string title, string description, string ownerId, string todoListId, DateTime deadline, List<string> tags, CancellationToken token);
+    Task AddNewTodoAsync(string title, string description, string ownerId, string todoListId, DateTime deadline,  CancellationToken token);
     Task DeleteTodoAsync(Guid todoId, CancellationToken token);
     Task ReserveTodoAsync(Guid todoId, string reserverId, CancellationToken token);
     Task CompleteTodoAsync(Guid todoId, CancellationToken token);

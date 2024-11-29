@@ -63,7 +63,7 @@ namespace Presenter
                 throw new ArgumentException("OwnerId cannot be null or empty.", nameof(ownerId));
             }
 
-            var todoList = new TodoList(Guid.NewGuid(), title, ownerId, new List<Todo>());
+            var todoList = new TodoList(Guid.NewGuid(), title, ownerId);
             token.ThrowIfCancellationRequested();
             await _wishlistRepository.AddTodoListAsync(todoList, token);
         }
@@ -75,17 +75,21 @@ namespace Presenter
             await _wishlistRepository.DeleteTodoListAsync(todoListId, token);
         }
 
-        // Метод обновления списка задач
-        public async Task UpdateTodolistAsync(TodoList todoList, CancellationToken token)
-        {
-            if (todoList == null)
-            {
-                throw new ArgumentNullException(nameof(todoList), "Todo list cannot be null.");
-            }
+        
+       // Метод обновления списка задач
+       public async Task UpdateTodolistAsync(TodoList todoList, CancellationToken token)
+       {
+           if (todoList == null)
+           {
+               throw new ArgumentNullException(nameof(todoList), "Todo list cannot be null.");
+           }
+       
+           token.ThrowIfCancellationRequested();
+       
+           // Извлекаем Id из объекта TodoList и передаём его в метод
+           await _wishlistRepository.UpdateTodoListAsync(todoList.Id, todoList, token);
+       }
 
-            token.ThrowIfCancellationRequested();
-            await _wishlistRepository.UpdateTodoListAsync(todoList, token);
-        }
 
         // Метод фильтрации задач по сроку
         public async Task<IReadOnlyCollection<Todo>> FilterTodosByDeadlineAsync(DateTime deadline, CancellationToken token)

@@ -21,8 +21,9 @@ namespace Presenter
 
         public UserPresenter()
         {
-            _userRepository = new UserStorage();
-            _authService = new AuthenticationService( new UserStorage());
+            var userStorage = new UserStorage();
+            _userRepository = userStorage;
+            _authService = new AuthenticationService(userStorage);
         }
 
         public async Task CreateUserAsync(string name, string email, string password, CancellationToken token)

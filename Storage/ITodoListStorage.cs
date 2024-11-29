@@ -8,13 +8,15 @@ namespace Storage
 {
     public interface ITodoListStorage
     {
-        Task<IReadOnlyCollection<TodoList>> GetUserTodoListsAsync(string userId, CancellationToken token);
-        Task AddTodoListAsync(TodoList todoList, CancellationToken token);
-        Task DeleteTodoListAsync(Guid todoListId, CancellationToken token);
-        Task UpdateTodoListAsync(TodoList todoList, CancellationToken token);
-        Task<IReadOnlyCollection<Todo>> GetAllTodosAsync(CancellationToken token);
-        Task<IReadOnlyCollection<Todo>> GetTodosByTagAsync(string tag, CancellationToken token);
-        Task<IReadOnlyCollection<Todo>> GetTodosByDeadlineAsync(DateTime deadline, CancellationToken token);
-
+        Task<List<TodoList>> GetAllTodoListsAsync(CancellationToken cancellationToken);
+        Task<List<TodoList>> GetUserTodoListsAsync(string userId, CancellationToken cancellationToken);
+        Task AddTodoListAsync(TodoList todoList, CancellationToken cancellationToken);
+        Task UpdateTodoListAsync(Guid todoListId, TodoList updatedTodoList, CancellationToken cancellationToken);
+        Task DeleteTodoListAsync(Guid todoListId, CancellationToken cancellationToken);
+        Task<TodoList?> GetTodoListByIdAsync(Guid todoListId, CancellationToken cancellationToken);
+        Task<IReadOnlyCollection<Todo>> GetAllTodosAsync(CancellationToken cancellationToken);
+        Task<IReadOnlyCollection<Todo>> GetTodosByTagAsync(string tag, CancellationToken cancellationToken);
+        Task<IReadOnlyCollection<Todo>> GetTodosByDeadlineAsync(DateTime deadline, CancellationToken cancellationToken);
     }
+
 }

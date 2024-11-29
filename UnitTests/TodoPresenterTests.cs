@@ -53,7 +53,7 @@ namespace Presenter.Tests
             List<string> tags = new List<string>();
 
             // Act & Assert
-            var exception = Assert.ThrowsAsync<ArgumentNullException>(() => _todoPresenter.AddNewTodoAsync(title, description, ownerId, todoListId, deadline, tags, _cancellationToken));
+            var exception = Assert.ThrowsAsync<ArgumentNullException>(() => _todoPresenter.AddNewTodoAsync(title, description, ownerId, todoListId, deadline,  _cancellationToken));
             Assert.That(exception.Message, Does.Contain("Parameters cannot be null or empty"));
         }
         
@@ -72,7 +72,7 @@ namespace Presenter.Tests
                 .Returns(Task.CompletedTask); // Мокаем вызов
 
             // Act
-            await _todoPresenter.AddNewTodoAsync(title, description, ownerId, todoListId, deadline, tags, _cancellationToken);
+            await _todoPresenter.AddNewTodoAsync(title, description, ownerId, todoListId, deadline, _cancellationToken);
 
             // Assert
             _todoStorageMock.Verify(s => s.AddTodoAsync(It.IsAny<Todo>(), _cancellationToken), Times.Once);
@@ -109,7 +109,7 @@ namespace Presenter.Tests
             // Arrange
             var completedTodos = new List<Todo>
             {
-                new Todo(Guid.NewGuid(), "Completed Todo 1", "Description 1", DateTime.Now, new List<string>(), true, Guid.NewGuid(), "OwnerId")
+                new Todo(Guid.NewGuid(), "Completed Todo 1", "Description 1", DateTime.Now,  true, Guid.NewGuid(), "OwnerId")
             };
 
             _todoStorageMock
@@ -130,8 +130,8 @@ namespace Presenter.Tests
             var tag = "TestTag";
             var matchingTodos = new List<Todo>
             {
-                new Todo(Guid.NewGuid(), "Test Todo 1", "Description 1", DateTime.Now, new List<string> { tag }, false, Guid.NewGuid(), "OwnerId"),
-                new Todo(Guid.NewGuid(), "Test Todo 2", "Description 2", DateTime.Now, new List<string> { tag }, false, Guid.NewGuid(), "OwnerId")
+                new Todo(Guid.NewGuid(), "Test Todo 1", "Description 1", DateTime.Now, false, Guid.NewGuid(), "OwnerId"),
+                new Todo(Guid.NewGuid(), "Test Todo 2", "Description 2", DateTime.Now,  false, Guid.NewGuid(), "OwnerId")
             };
 
             _todoStorageMock
@@ -151,8 +151,8 @@ namespace Presenter.Tests
             // Arrange
             var todos = new List<Todo>
             {
-                new Todo(Guid.NewGuid(), "Todo 1", "Description 1", DateTime.Now.AddDays(2), new List<string>(), false, Guid.NewGuid(), "OwnerId"),
-                new Todo(Guid.NewGuid(), "Todo 2", "Description 2", DateTime.Now.AddDays(1), new List<string>(), false, Guid.NewGuid(), "OwnerId")
+                new Todo(Guid.NewGuid(), "Todo 1", "Description 1", DateTime.Now.AddDays(2),  false, Guid.NewGuid(), "OwnerId"),
+                new Todo(Guid.NewGuid(), "Todo 2", "Description 2", DateTime.Now.AddDays(1), false, Guid.NewGuid(), "OwnerId")
             };
 
             _todoStorageMock

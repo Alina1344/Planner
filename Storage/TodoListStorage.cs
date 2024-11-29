@@ -1,78 +1,116 @@
-using Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Models;
+using Storage;
 
 namespace Storage
 {
     public class TodoListStorage : ITodoListStorage
     {
-        private readonly IFileStorage<TodoList> _repository;
+        private readonly IDatabaseRepository<TodoList> _todoListRepository;
+        private readonly IDatabaseRepository<Todo> _todoRepository;
 
-        public TodoListStorage(IFileStorage<TodoList> repository)
+        // Конструктор для инициализации репозиториев с интерфейсами
+        public TodoListStorage(IDatabaseRepository<TodoList> todoListRepository, IDatabaseRepository<Todo> todoRepository)
         {
-            _repository = repository;
+            _todoListRepository = todoListRepository ?? throw new ArgumentNullException(nameof(todoListRepository));
+            _todoRepository = todoRepository ?? throw new ArgumentNullException(nameof(todoRepository));
         }
 
+        // Конструктор с жестко заданной строкой подключения и именем таблицы
+        // Используется для создания репозиториев с конкретными реализациями
         public TodoListStorage()
         {
-            _repository = new FileStorage<TodoList>("../../data/TodoLists.json", "todolists");
+            _todoListRepository = new DatabaseRepository<TodoList>(
+                "Host=localhost;Port=1111;Username=postgres;Password=alina13122003;Database=postgres",
+                "todolists");
+
+            _todoRepository = new DatabaseRepository<Todo>(
+                "Host=localhost;Port=1111;Username=postgres;Password=alina13122003;Database=postgres",
+                "todos");
         }
 
-        public async Task<IReadOnlyCollection<TodoList>> GetUserTodoListsAsync(string userId, CancellationToken token)
+        // Получение списка всех списков задач
+        public async Task<List<TodoList>> GetAllTodoListsAsync(CancellationToken cancellationToken)
         {
-            token.ThrowIfCancellationRequested();
-            var todoLists = await _repository.GetAllAsync(token);
-            return todoLists.Where(t => t.OwnerId == userId).ToList().AsReadOnly();
+            var todoLists = await _todoListRepository.GetListAsync(null, null, cancellationToken);
+            return todoLists.ToList();
         }
 
-        public async Task AddTodoListAsync(TodoList todoList, CancellationToken token)
+        // Получение списка задач по владельцу (пользователю)
+        public async Task<List<TodoList>> GetUserTodoListsAsync(string userId, CancellationToken cancellationToken)
         {
-            token.ThrowIfCancellationRequested();
-            await _repository.AddAsync(todoList, token);
+            if (string.IsNullOrWhiteSpace(userId))
+                throw new ArgumentException("UserId не может быть пустым.", nameof(userId));
+
+            var todoLists = await _todoListRepository.GetListAsync("ownerid = @OwnerId", new { OwnerId = userId }, cancellationToken);
+            return todoLists.ToList();
         }
 
-        public async Task DeleteTodoListAsync(Guid todoListId, CancellationToken token)
+        // Добавление нового списка задач
+        public async Task AddTodoListAsync(TodoList todoList, CancellationToken cancellationToken)
         {
-            token.ThrowIfCancellationRequested();
-            await _repository.DeleteAsync(t => t.Id == todoListId, token);
+            if (todoList == null)
+                throw new ArgumentNullException(nameof(todoList));
+
+            await _todoListRepository.AddAsync(todoList, cancellationToken);
         }
 
-        public async Task UpdateTodoListAsync(TodoList todoList, CancellationToken token)
+        // Обновление списка задач
+        public async Task UpdateTodoListAsync(Guid todoListId, TodoList updatedTodoList, CancellationToken cancellationToken)
         {
-            token.ThrowIfCancellationRequested();
-            await _repository.UpdateAsync(t => t.Id == todoList.Id, todoList, token);
+            if (updatedTodoList == null)
+                throw new ArgumentNullException(nameof(updatedTodoList));
+
+            await _todoListRepository.UpdateAsync("id = @Id", new { Id = todoListId }, updatedTodoList, cancellationToken);
         }
 
-        public async Task<IReadOnlyCollection<Todo>> GetAllTodosAsync(CancellationToken token)
+        // Удаление списка задач
+        public async Task DeleteTodoListAsync(Guid todoListId, CancellationToken cancellationToken)
         {
-            token.ThrowIfCancellationRequested();
-            var todoLists = await _repository.GetAllAsync(token);
-            return todoLists.SelectMany(t => t.Todos).ToList().AsReadOnly();
+            // Удаляем все связанные задачи перед удалением списка задач
+            await _todoRepository.DeleteAsync("todolist_id = @TodoListId", new { TodoListId = todoListId }, cancellationToken);
+
+            await _todoListRepository.DeleteAsync("id = @Id", new { Id = todoListId }, cancellationToken);
         }
-        public async Task<IReadOnlyCollection<Todo>> GetTodosByTagAsync(string tag, CancellationToken token)
+
+        // Получение конкретного списка задач по ID
+        public async Task<TodoList?> GetTodoListByIdAsync(Guid todoListId, CancellationToken cancellationToken)
         {
-            token.ThrowIfCancellationRequested();
-            var todoLists = await _repository.GetAllAsync(token);
-            return todoLists
-                .SelectMany(t => t.Todos)
-                .Where(todo => todo.Tags.Contains(tag, StringComparer.OrdinalIgnoreCase))
-                .ToList()
-                .AsReadOnly();
+            return await _todoListRepository.GetSingleAsync("id = @Id", new { Id = todoListId }, cancellationToken);
         }
-    
-        public async Task<IReadOnlyCollection<Todo>> GetTodosByDeadlineAsync(DateTime deadline, CancellationToken token)
+
+        // Получение всех задач по идентификатору списка задач
+        public async Task<List<Todo>> GetTodosByTodoListIdAsync(Guid todoListId, CancellationToken cancellationToken)
         {
-            token.ThrowIfCancellationRequested();
-            var todoLists = await _repository.GetAllAsync(token);
-            return todoLists
-                .SelectMany(t => t.Todos)
-                .Where(todo => todo.Deadline <= deadline)
-                .ToList()
-                .AsReadOnly();
+            return await _todoRepository.GetListAsync("todolist_id = @TodoListId", new { TodoListId = todoListId }, cancellationToken);
+        }
+
+        // Получение всех задач
+        public async Task<IReadOnlyCollection<Todo>> GetAllTodosAsync(CancellationToken cancellationToken)
+        {
+            var todos = await _todoRepository.GetListAsync(null, null, cancellationToken);
+            return todos.ToList().AsReadOnly();
+        }
+
+        // Получение задач по тегу
+        public async Task<IReadOnlyCollection<Todo>> GetTodosByTagAsync(string tag, CancellationToken cancellationToken)
+        {
+            if (string.IsNullOrWhiteSpace(tag))
+                throw new ArgumentException("Tag не может быть пустым.", nameof(tag));
+
+            var todos = await _todoRepository.GetListAsync("tags ILIKE @Tag", new { Tag = "%" + tag + "%" }, cancellationToken);
+            return todos.ToList().AsReadOnly();
+        }
+
+        // Получение задач по крайнему сроку выполнения
+        public async Task<IReadOnlyCollection<Todo>> GetTodosByDeadlineAsync(DateTime deadline, CancellationToken cancellationToken)
+        {
+            var todos = await _todoRepository.GetListAsync("deadline <= @Deadline", new { Deadline = deadline }, cancellationToken);
+            return todos.ToList().AsReadOnly();
         }
     }
-
 }

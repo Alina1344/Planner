@@ -25,3 +25,7 @@ C:\Users\Алина\RiderProjects\Planner\Planner\obj\Debug\net8.0\ref\Planner.d
 C:\Users\Алина\RiderProjects\Planner\Planner\obj\Debug\net8.0\Planner.sourcelink.json
 C:\Users\Алина\RiderProjects\Planner\Planner\bin\Debug\net8.0\nunit.framework.dll
 C:\Users\Алина\RiderProjects\Planner\Planner\bin\Debug\net8.0\nunit.framework.legacy.dll
+C:\Users\Алина\RiderProjects\Planner\Planner\bin\Debug\net8.0\Dapper.dll
+C:\Users\Алина\RiderProjects\Planner\Planner\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\Алина\RiderProjects\Planner\Planner\bin\Debug\net8.0\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\Алина\RiderProjects\Planner\Planner\bin\Debug\net8.0\Npgsql.dll

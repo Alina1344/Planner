@@ -29,7 +29,7 @@ namespace Presenter
             return await _todoStorage.LoadReservedTodosByUserIdAsync(userId, token);
         }
 
-        public async Task AddNewTodoAsync(string title, string description, string ownerId, string todoListId, DateTime deadline, List<string> tags, CancellationToken token)
+        public async Task AddNewTodoAsync(string title, string description, string ownerId, string todoListId, DateTime deadline, CancellationToken token)
         {
             if (string.IsNullOrWhiteSpace(title) || string.IsNullOrWhiteSpace(description) || string.IsNullOrWhiteSpace(ownerId) || string.IsNullOrWhiteSpace(todoListId))
             {
@@ -41,7 +41,6 @@ namespace Presenter
                 title,
                 description,
                 deadline,
-                tags, // Добавление тегов
                 false,
                 Guid.Parse(todoListId),
                 ownerId
@@ -51,6 +50,8 @@ namespace Presenter
             await _todoStorage.AddTodoAsync(todo, token);
         }
 
+
+        
 
         public async Task DeleteTodoAsync(Guid todoId, CancellationToken token)
         {
