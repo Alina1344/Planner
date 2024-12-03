@@ -137,5 +137,23 @@ namespace Storage
                 new { UserId = userId },
                 token);
         }
+
+        public async Task<Todo?> GetTodoAsync(string toString, CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            // Проверяем, можно ли преобразовать строку в Guid
+            if (!Guid.TryParse(toString, out var todoId))
+            {
+                throw new ArgumentException("Invalid ID format.", nameof(toString));
+            }
+
+            // Ищем задачу по ID
+            var todos = await _repository.GetListAsync("id = @Id", new { Id = todoId }, cancellationToken);
+
+            // Возвращаем первую найденную задачу или null
+            return todos.FirstOrDefault();
+        }
+        
     }
 }

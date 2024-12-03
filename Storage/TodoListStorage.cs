@@ -72,7 +72,7 @@ namespace Storage
         public async Task DeleteTodoListAsync(Guid todoListId, CancellationToken cancellationToken)
         {
             // Удаляем все связанные задачи перед удалением списка задач
-            await _todoRepository.DeleteAsync("todolist_id = @TodoListId", new { TodoListId = todoListId }, cancellationToken);
+            await _todoRepository.DeleteAsync("todolistid = @TodoListId", new { TodoListId = todoListId }, cancellationToken);
 
             await _todoListRepository.DeleteAsync("id = @Id", new { Id = todoListId }, cancellationToken);
         }
@@ -86,7 +86,7 @@ namespace Storage
         // Получение всех задач по идентификатору списка задач
         public async Task<List<Todo>> GetTodosByTodoListIdAsync(Guid todoListId, CancellationToken cancellationToken)
         {
-            return await _todoRepository.GetListAsync("todolist_id = @TodoListId", new { TodoListId = todoListId }, cancellationToken);
+            return await _todoRepository.GetListAsync("todolistid = @TodoListId", new { TodoListId = todoListId }, cancellationToken);
         }
 
         // Получение всех задач
@@ -95,16 +95,7 @@ namespace Storage
             var todos = await _todoRepository.GetListAsync(null, null, cancellationToken);
             return todos.ToList().AsReadOnly();
         }
-
-        // Получение задач по тегу
-        public async Task<IReadOnlyCollection<Todo>> GetTodosByTagAsync(string tag, CancellationToken cancellationToken)
-        {
-            if (string.IsNullOrWhiteSpace(tag))
-                throw new ArgumentException("Tag не может быть пустым.", nameof(tag));
-
-            var todos = await _todoRepository.GetListAsync("tags ILIKE @Tag", new { Tag = "%" + tag + "%" }, cancellationToken);
-            return todos.ToList().AsReadOnly();
-        }
+        
 
         // Получение задач по крайнему сроку выполнения
         public async Task<IReadOnlyCollection<Todo>> GetTodosByDeadlineAsync(DateTime deadline, CancellationToken cancellationToken)

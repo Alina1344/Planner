@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace WebApplication1.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     public class TodosController : ControllerBase
     {
         private readonly ITodoStorage _todoStorage;
@@ -43,18 +43,18 @@ namespace WebApplication1.Controllers
             return NoContent();
         }
 
-        // Поиск задач по тегу
-        [HttpGet("search-by-tag")]
-        public async Task<ActionResult<IReadOnlyCollection<Todo>>> SearchTodosByTag([FromQuery] string tag, CancellationToken cancellationToken)
-        {
-            var todos = await _todoStorage.SearchTodosByTagAsync(tag, cancellationToken);
-            return Ok(todos);
-        }
+        
 
         // Удаление задачи
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTodo(Guid id, CancellationToken cancellationToken)
         {
+            var todo = await _todoStorage.GetTodoAsync(id.ToString(), cancellationToken);
+
+            if (todo == null)
+            {
+                return NotFound(new { Message = "Todo not found or already deleted." });
+            }
             await _todoStorage.DeleteTodoAsync(id, cancellationToken);
             return NoContent();
         }

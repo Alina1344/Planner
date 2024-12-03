@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace WebApplication1.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/[controller]/[action]")]
 public class TodoListController : ControllerBase
 {
     private readonly ITodoListStorage _todoListStorage;
@@ -50,15 +50,27 @@ public class TodoListController : ControllerBase
     }
 
     // Добавление нового списка задач
+    
+    
     [HttpPost]
     public async Task<IActionResult> AddTodoList([FromBody] TodoList newTodoList, CancellationToken cancellationToken)
     {
-        if (newTodoList == null)
-            return BadRequest("Список задач не может быть пустым."); // HTTP 400
+        // Логируем данные для проверки
+        Console.WriteLine($"Id: {newTodoList.Id}, Title: {newTodoList.Title}, OwnerId: {newTodoList.OwnerId}");
 
-        await _todoListStorage.AddTodoListAsync(newTodoList, cancellationToken);
-        return CreatedAtAction(nameof(GetTodoListById), new { id = newTodoList.Id }, newTodoList); // HTTP 201
+        try
+        {
+            await _todoListStorage.AddTodoListAsync(newTodoList, cancellationToken);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            // Логируем ошибку
+            Console.WriteLine($"Ошибка: {ex.Message}");
+            return StatusCode(500, ex.Message);
+        }
     }
+
 
     // Обновление списка задач
     [HttpPut("{id:guid}")]
@@ -71,32 +83,43 @@ public class TodoListController : ControllerBase
         return NoContent(); // HTTP 204
     }
 
-    // Удаление списка задач
+    
+    
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteTodoList(Guid id, CancellationToken cancellationToken)
     {
+        // Проверяем, существует ли список задач
+        var todoList = await _todoListStorage.GetTodoListByIdAsync(id, cancellationToken);
+        if (todoList == null)
+        {
+            return NotFound(new { Message = "Todo list not found." });
+        }
+
+        // Проверяем наличие связанных задач
+        var todos = await _todoListStorage.GetTodosByTodoListIdAsync(id, cancellationToken);
+        if (todos.Any())
+        {
+            return Conflict(new { Message = "Cannot delete the todo list as it contains tasks." });
+        }
+
+        // Удаляем список задач
         await _todoListStorage.DeleteTodoListAsync(id, cancellationToken);
+
         return NoContent(); // HTTP 204
     }
+
+    
+    
+    
 
     // Получение всех задач по ID списка задач
     [HttpGet("{id:guid}/todos")]
     public async Task<IActionResult> GetTodosByTodoListId(Guid id, CancellationToken cancellationToken)
     {
-        var todos = await _todoListStorage.GetTodosByTodoListIdAsync(id, cancellationToken);
+        var todos = await _todoListStorage.GetTodoListByIdAsync(id, cancellationToken);
         return Ok(todos);
     }
-
-    // Получение задач по тегу
-    [HttpGet("todos/tag")]
-    public async Task<IActionResult> GetTodosByTag([FromQuery] string tag, CancellationToken cancellationToken)
-    {
-        if (string.IsNullOrWhiteSpace(tag))
-            return BadRequest("Tag не может быть пустым."); // HTTP 400
-
-        var todos = await _todoListStorage.GetTodosByTagAsync(tag, cancellationToken);
-        return Ok(todos);
-    }
+    
 
     // Получение задач с крайним сроком
     [HttpGet("todos/deadline")]

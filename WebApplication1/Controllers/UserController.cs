@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace WebApplication1.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     public class UsersController : ControllerBase
     {
         private readonly IUserStorage _userStorage;
@@ -44,13 +44,7 @@ namespace WebApplication1.Controllers
             return CreatedAtAction(nameof(GetUserById), new { id = user.Id }, user);
         }
 
-        // Удалить пользователя
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(string id, CancellationToken cancellationToken)
-        {
-            await _userStorage.DeleteUserAsync(id, cancellationToken);
-            return NoContent();
-        }
+        
 
         // Обновить данные пользователя
         [HttpPut("{id}")]

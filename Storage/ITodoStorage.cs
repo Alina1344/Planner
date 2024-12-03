@@ -18,5 +18,6 @@ namespace Storage
         Task<IReadOnlyCollection<Todo>> GetAllTodosAsync(CancellationToken token);
         Task ReserveTodoAsync(Guid todoId, string reserverId, CancellationToken token);
         Task<IReadOnlyCollection<Todo>> LoadReservedTodosByUserIdAsync(string userId, CancellationToken token);
+        Task<Todo?> GetTodoAsync(string toString, CancellationToken cancellationToken);
     }
 }
