@@ -18,14 +18,7 @@ public class TodoListController : ControllerBase
     {
         _todoListStorage = todoListStorage ?? throw new ArgumentNullException(nameof(todoListStorage));
     }
-
-    // Получение всех списков задач
-    [HttpGet]
-    public async Task<IActionResult> GetAllTodoLists(CancellationToken cancellationToken)
-    {
-        var todoLists = await _todoListStorage.GetAllTodoListsAsync(cancellationToken);
-        return Ok(todoLists); // Возвращает HTTP 200 с телом ответа
-    }
+    
 
     // Получение списков задач конкретного пользователя
     [HttpGet("user/{userId}")]
