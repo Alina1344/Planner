@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;  // Не забудьте добавить
 
 namespace WebApplication1.Controllers;
 
@@ -22,6 +23,7 @@ public class TodoListController : ControllerBase
 
     // Получение списков задач конкретного пользователя
     [HttpGet("user/{userId}")]
+    [Authorize]  // Требуется авторизация
     public async Task<IActionResult> GetUserTodoLists(string userId, CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(userId))
@@ -33,6 +35,7 @@ public class TodoListController : ControllerBase
 
     // Получение конкретного списка задач по ID
     [HttpGet("{id:guid}")]
+    [Authorize]  // Требуется авторизация
     public async Task<IActionResult> GetTodoListById(Guid id, CancellationToken cancellationToken)
     {
         var todoList = await _todoListStorage.GetTodoListByIdAsync(id, cancellationToken);
@@ -46,6 +49,7 @@ public class TodoListController : ControllerBase
     
     
     [HttpPost]
+    [Authorize]  // Требуется авторизация
     public async Task<IActionResult> AddTodoList([FromBody] TodoList newTodoList, CancellationToken cancellationToken)
     {
         // Логируем данные для проверки
@@ -67,6 +71,7 @@ public class TodoListController : ControllerBase
 
     // Обновление списка задач
     [HttpPut("{id:guid}")]
+    [Authorize]  // Требуется авторизация
     public async Task<IActionResult> UpdateTodoList(Guid id, [FromBody] TodoList updatedTodoList, CancellationToken cancellationToken)
     {
         if (updatedTodoList == null)
@@ -79,6 +84,7 @@ public class TodoListController : ControllerBase
     
     
     [HttpDelete("{id:guid}")]
+    [Authorize]  // Требуется авторизация
     public async Task<IActionResult> DeleteTodoList(Guid id, CancellationToken cancellationToken)
     {
         // Проверяем, существует ли список задач

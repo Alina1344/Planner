@@ -4,6 +4,7 @@ using Models;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;  // Не забудьте добавить
 
 namespace WebApplication1.Controllers
 {
@@ -47,9 +48,17 @@ namespace WebApplication1.Controllers
         
 
         // Обновить данные пользователя
+   
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(string id, [FromBody] User updatedUser, CancellationToken cancellationToken)
         {
+            if (updatedUser == null)
+                return BadRequest("Updated user object is null.");
+        
+            var existingUser = await _userStorage.GetUserAsync(id, cancellationToken);
+            if (existingUser == null)
+                return NotFound($"User with ID {id} not found.");
+        
             await _userStorage.UpdateUserAsync(id, updatedUser, cancellationToken);
             return NoContent();
         }
